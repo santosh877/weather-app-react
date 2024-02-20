@@ -11,20 +11,21 @@ const LocationContextProvider = (props) => {
   };
 
   useEffect(() => {
-    const url = 'http://ip-api.com/json';
-    Axios.get(url)
-      .then(function (res) {
-          if(res.status === 200){
-                console.log("ashah", res.data)
-          const { city, country, lat, lon } = res?.data;
-          setLocation({ position: { city, country, lat, lon } })
-        }
-    
+    fetch('http://ip-api.com/json', 
+    { method: "GET", 
+    mode: 'cors', 
+    headers: { 'Content-Type': 'application/json',}})
+    .then(response => response.json())
+    .then(function (res) {
+      if(res.status === "success"){
+        const { city, country, lat, lon } = res;
+      setLocation({ position: { city, country, lat, lon } })
+    }
+  })
+  .catch(function (error) {
+    console.log(error);
+  })
 
-      })
-      .catch(function (error) {
-        console.log(error);
-      })
   }, []);
 
   return (
